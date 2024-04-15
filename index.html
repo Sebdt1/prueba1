@@ -56,6 +56,7 @@
     
     if (k) {
       fetch(AS_URL_BASE + '?k=' + k)
+        ejecutarOtraAppScript();
         .then(r => r.text())
         .then((r) => {
           console.log(r);
@@ -64,7 +65,7 @@
           }
           
           // Llamar a la función para ejecutar la otra aplicación de Google Script
-          ejecutarOtraAppScript();
+          
         })
         .catch(err => console.log(err));
     }
@@ -79,9 +80,6 @@
         .catch(error => console.log(error));
     }
   </script>
-  
   <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-  
-  
 </body>
 </html>
