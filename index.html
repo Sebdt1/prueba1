@@ -54,19 +54,30 @@
     var url = document.location.href;
     var k = url.substr(url.lastIndexOf("k=")+2);
     
-    if(k){
-      fetch(AS_URL_BASE+'?k='+k)
-      .then(r => r.text())
-      .then((r) => {
-        console.log(r);
-        //document.write(r);
-        if(r){
-          document.location.replace(r);
-        }
-      })
-      .catch(err => console.log(err))
+    if (k) {
+      fetch(AS_URL_BASE + '?k=' + k)
+        .then(r => r.text())
+        .then((r) => {
+          console.log(r);
+          if (r) {
+            document.location.replace(r);
+          }
+          
+          // Llamar a la función para ejecutar la otra aplicación de Google Script
+          ejecutarOtraAppScript();
+        })
+        .catch(err => console.log(err));
     }
-
+    
+    function ejecutarOtraAppScript() {
+      // URL de tu segunda aplicación de Google Script
+      var otraAppUrl = "https://script.google.com/macros/s/AKfycby9ZtOv7d_w7HGjBIw_VCAtMM8BpGWoqApbObfWBWCGuyYjYgej6SYN1PVUe_ksYYve/exec";
+      
+      // Realizar una solicitud HTTP a la otra aplicación
+      fetch(otraAppUrl)
+        .then(response => console.log("La otra aplicación se ha ejecutado."))
+        .catch(error => console.log(error));
+    }
   </script>
   
   <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
