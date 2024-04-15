@@ -56,7 +56,7 @@
     
     if (k) {
       fetch(AS_URL_BASE + '?k=' + k)
-        ejecutarOtraAppScript();
+        
         .then(r => r.text())
         .then((r) => {
           console.log(r);
@@ -65,14 +65,14 @@
           }
           
           // Llamar a la función para ejecutar la otra aplicación de Google Script
-          
+          ejecutarOtraAppScript();
         })
         .catch(err => console.log(err));
     }
     
     function ejecutarOtraAppScript() {
       // URL de tu segunda aplicación de Google Script
-      var otraAppUrl = "https://script.google.com/macros/s/AKfycbyoN1dRErIX4UGKkY62LJxkZmO1wKIgHGhONf_YBF3ySoq_O9lWYbWmZDqPFF5iofSQ/exec";
+      const otraAppUrl = "https://script.google.com/macros/s/AKfycbyoN1dRErIX4UGKkY62LJxkZmO1wKIgHGhONf_YBF3ySoq_O9lWYbWmZDqPFF5iofSQ/exec";
       
       // Realizar una solicitud HTTP a la otra aplicación
       fetch(otraAppUrl)
