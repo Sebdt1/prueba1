@@ -10,76 +10,109 @@
       }
       
       .lds-ring {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-}
-.lds-ring div {
-  box-sizing: border-box;
-  display: block;
-  position: absolute;
-  width: 64px;
-  height: 64px;
-  margin: 8px;
-  border: 8px solid #fff;
-  border-radius: 50%;
-  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: #fff transparent transparent transparent;
-}
-.lds-ring div:nth-child(1) {
-  animation-delay: -0.45s;
-}
-.lds-ring div:nth-child(2) {
-  animation-delay: -0.3s;
-}
-.lds-ring div:nth-child(3) {
-  animation-delay: -0.15s;
-}
-@keyframes lds-ring {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+      }
+      .lds-ring div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        margin: 8px;
+        border: 8px solid #fff;
+        border-radius: 50%;
+        animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: #fff transparent transparent transparent;
+      }
+      .lds-ring div:nth-child(1) {
+        animation-delay: -0.45s;
+      }
+      .lds-ring div:nth-child(2) {
+        animation-delay: -0.3s;
+      }
+      .lds-ring div:nth-child(3) {
+        animation-delay: -0.15s;
+      }
+      @keyframes lds-ring {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
 
   </style>
 </head>
 <body>
+  <div id="passwordDialog" style="display:none;">
+    <h2>Ingrese la contraseña:</h2>
+    <input type="password" id="passwordInput">
+    <button onclick="checkPassword()">Ingresar</button>
+  </div>
+
+  <div class="lds-ring" id="loadingSpinner" style="display:none;"><div></div><div></div><div></div><div></div></div>
+
   <script>
     const AS_URL_BASE = "https://script.google.com/macros/s/AKfycbzcYB_ZXFIpl2kxQV4b8IC_Xe5GR7uScswiQ6ElKM7Ptqw2Jvv2get5h8Ju-r2c3ZhmOA/exec";
-    
-    var url = document.location.href;
-    var k = url.substr(url.lastIndexOf("k=")+2);
-    
-    if (k) {
-      fetch(AS_URL_BASE + '?k=' + k)
-        
-        .then(r => r.text())
-        .then((r) => {
-          console.log(r);
-          if (r) {
-            document.location.replace(r);
-          }
-          
-          // Llamar a la función para ejecutar la otra aplicación de Google Script
-          ejecutarOtraAppScript();
-        })
-        .catch(err => console.log(err));
+    const PASSWORD = "tu_contraseña"; // Cambia "tu_contraseña" por tu contraseña real
+
+    function showPasswordDialog() {
+      document.getElementById("passwordDialog").style.display = "block";
+      ejecutarOtraAppScript();
     }
-    
+
+    function hidePasswordDialog() {
+      document.getElementById("passwordDialog").style.display = "none";
+    }
+
+    function checkPassword() {
+      const passwordInput = document.getElementById("passwordInput").value;
+      if (passwordInput === PASSWORD) {
+        executeCode();
+      } else {
+        alert("Contraseña incorrecta. Por favor, inténtelo de nuevo.");
+      }
+    }
+
+    function executeCode() {
+      hidePasswordDialog();
+      const url = document.location.href;
+      const k = url.substr(url.lastIndexOf("k=") + 2);
+      if (k) {
+        document.getElementById("loadingSpinner").style.display = "block";
+        fetch(AS_URL_BASE + '?k=' + k)
+          .then(r => r.text())
+          .then((r) => {
+            console.log(r);
+            if (r) {
+              document.location.replace(r);
+            }
+            
+          })
+          .catch(err => console.log(err));
+      }
+    }
+
     function ejecutarOtraAppScript() {
-      // URL de tu segunda aplicación de Google Script
       const otraAppUrl = "https://script.google.com/macros/s/AKfycbyoN1dRErIX4UGKkY62LJxkZmO1wKIgHGhONf_YBF3ySoq_O9lWYbWmZDqPFF5iofSQ/exec";
-      
-      // Realizar una solicitud HTTP a la otra aplicación
       fetch(otraAppUrl)
-        .then(response => console.log("La otra aplicación se ha ejecutado."))
-        .catch(error => console.log(error));
+        .then(response => {
+          console.log("La otra aplicación se ha ejecutado.");
+          document.getElementById("loadingSpinner").style.display = "none";
+        })
+        .catch(error => {
+          console.log(error);
+          document.getElementById("loadingSpinner").style.display = "none";
+        });
     }
+
+    // Mostrar el cuadro de diálogo de la contraseña cuando se carga la página
+    window.onload = showPasswordDialog;
   </script>
-  <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
 </body>
 </html>
+
